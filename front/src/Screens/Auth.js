@@ -16,42 +16,46 @@ class Auth extends react.Component{
     }
 
     login = (data) => {
-        // TODO: write codes to login
-        //connect to server, pass information that user has entered to server
-            //perform actions depending on what user enteres
         console.log(data);
+        fetch('http://localhost:3001/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        })
+          .then((response) => response.json())
+          .then((result) => {
+            console.log(result);
+            // do login stuff thnx
+            if(result.status) {
+                console.log("works");
+                this.props.changeScreen({screen: "lobby"});
+            }
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+      };
 
-        fetch(this.props.server_url + '/api/auth/login', {
-            method: "POST",
-            mode: 'cors',
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-                'Accept': "application/json"
-            },
-
-            body:JSON.stringify(data),
-
-        }).then((res) => {
-            res.json().then((data) => {
-                if (data.msg == "Logged in"){
-                    // this.setState({screen: "lobby"});
-                    this.props.changeScreen("lobby");
-                }
-                else{
-                    alert(data.msg);
-                    //this.setState({screen: "auth"});
-                }
-            });
-        });
-
-        
-    }
 
     register = (data) => {
-        // TODO: write codes to register
-        console.log(data);
-    }
+        console.log(data)
+        fetch('http://localhost:3001/api/auth/register', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
+            .then((result) => {
+            console.log(result);
+            })
+            .catch((error) => {
+            console.error('Error:', error);
+            });
+        }
 
     render(){
         let display = null;

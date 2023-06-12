@@ -156,6 +156,7 @@ io.on('connection', (socket) => {
   // Retrieve user information from session
   const username = socket.request.session.username;
   const name = socket.request.session.name;
+  let room = undefined;
 
   socket.on("join", (data) => {
     const { room } = data;
@@ -171,41 +172,77 @@ io.on('connection', (socket) => {
     console.log("user Disconnected");
   });
 
-  socket.on("message", (data) => {
+  // socket.on("message", (data) => {
+  //   console.log("is it here", data);
+  //   const room = socket.request.session.room;
+  //   io.to(room).emit("message", data);
+  // });
+
+  // socket.on("something", (data) => {
+  //   console.log("go over here u lil shit");
+  //   console.log(data);
+  //   const room = socket.request.session.room;
+  //   io.to(room).emit("something", data);
+  // });
+
+  socket.on("chat message", (data) => {
+    console.log(data);
     console.log("got the message", data);
-    const room = socket.request.session.room;
-    io.to(room).emit("message", data);
+    //const room = socket.request.session.room;
+    io.to(room).emit("chat message", data);
   });
 
-  socket.on('newMessage', (data) => {
-    try {
-      console.log(data)
-      const { text, senderId } = data;
-      const room = socket.request.session.room
-      console.log('Room Name:', roomName);
-      console.log('Sender ID:', senderId);
-      // Save the new message to the database
-      const newMessage = new Messages({
-        message: { text },
-        sender: senderId,
-        room: room,
-      });
-      console.log("saving to db")
-      // await newMessage.save();
+  // socket.on('newMessage', (data) => {
+  //   io.to(room).emit('newMessage', data);
+  //   console.log(data);
+  //  try {
+  //     console.log("newmessage is called")
+  //     console.log(data)
+  //     const { text, senderId } = data;
+  //     const room = socket.request.session.room
+  //     console.log('Room Name:', roomName);
+  //     console.log('Sender ID:', senderId);
+  //     // Save the new message to the database
+  //     const newMessage = new Messages({
+  //       message: { text },
+  //       sender: senderId,
+  //       room: room,
+  //     });
+  //     console.log("saving to db")
+  //     // await newMessage.save();
 
-      // Emit the new message to all connected clients in the room
-      io.to(room).emit('newMessage', {
-        message: text,
-        senderId,
-      });
-      console.log('New message:', text);
-      console.log('Sender ID:', senderId);
-      console.log('Room:', room);
-      console.log('Message emitted to other clients in the same room.');
-    } catch (error) {
-      console.error('Error creating or saving message:', error);
-    }
-  });
+  //     // Emit the new message to all connected clients in the room
+  //     // io.to(room).emit('newMessage', {
+  //     //   message: text,
+  //     //   senderId,
+  //     // });
+  //     io.to(room).emit("newMessage", data);
+  //     console.log('New message:', text);
+  //     console.log('Sender ID:', senderId);
+  //     console.log('Room:', room);
+  //     console.log('Message emitted to other clients in the same room.');
+  //   } catch (error) {
+  //     console.error('Error creating or saving message:', error);
+  //   }
+  //   // const { text, senderId } = data;
+  //   // io.to(room).emit("newMessage", data);
+  //   // await Promise.all([
+  //   //   (findUser = await User.findOne({ username: username})),
+  //   //   (findRoom = await room.findOne({ name: room})),
+  //   // ]);
+  //   // const chatmessage = new Messages({
+  //   //   message: {text: text},
+  //   //   sender: findUser._id,
+  //   //   room: findRoom._id,
+  //   // });
+  //   // console.log('New message:', text);
+  //   // console.log('Sender ID:', senderId);
+  //   // console.log('Room:', room);
+  //   // console.log('Message emitted to other clients in the same room.');
+  //   // const dataSaved = await chatmessage.save();
+
+   
+  // });
 
   socket.emit("starting data", { "text": "hi" });
 });

@@ -156,9 +156,11 @@ io.on('connection', (socket) => {
   // Retrieve user information from session
   const username = socket.request.session.username;
   const name = socket.request.session.name;
+  // let room = undefined;
 
   socket.on("join", (data) => {
-    const { room } = data;
+    let {room}  = data;
+
 
     socket.join(room);
     socket.request.session.room = room;
@@ -181,7 +183,7 @@ io.on('connection', (socket) => {
     try {
       console.log(data)
       const { text, senderId } = data;
-      const room = socket.request.session.room
+      let room = socket.request.session.room
       console.log('Room Name:', roomName);
       console.log('Sender ID:', senderId);
       // Save the new message to the database

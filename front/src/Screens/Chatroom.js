@@ -17,12 +17,19 @@ class Chatroom extends react.Component{
             username: props.username, 
             room: props.room ,
             // userId: undefined,
-        }
-        this.socket.on('newMessage', (message) => {
+        };
+        this.socket.on('message', (message) => {
+          console.log("new message")
             this.setState((prevState) => ({
               messages: [...prevState.messages, message]
             }));
           });
+          this.socket.on('newMessage', (message) => {
+            console.log("new message")
+              this.setState((prevState) => ({
+                messages: [...prevState.messages, message]
+              }));
+            });
     }
       
     componentWillUnmount() {
@@ -163,6 +170,7 @@ class Chatroom extends react.Component{
           }));
           console.log('Before emitting newMessage:', { message: text, senderId: this.state.userId });
           this.socket.emit('newMessage', { message: text, senderId: this.state.userId });
+          this.socket.emit('message', { text });
           console.log('After emitting newMessage');
 
         } else {
